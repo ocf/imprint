@@ -1,0 +1,25 @@
+services:
+  wordpress:
+    image: ocf-wordpress-core:latest
+    restart: always
+    ports:
+      - 8080:8080
+    volumes:
+      - wordpress:/var/www/html
+    tmpfs:
+      /tmp
+  mariadb:
+    image: mariadb:latest
+    restart: always
+    environment:
+      MARIADB_DATABASE: meow
+      MARIADB_USER: meowuser
+      MARIADB_PASSWORD: meowpassword
+      MARIADB_RANDOM_ROOT_PASSWORD: '1'
+    #volumes:
+    #  - db:/var/lib/mysql
+    tmpfs:
+      /var/lib/mysql
+volumes:
+  wordpress:
+  #db:
