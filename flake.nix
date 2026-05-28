@@ -23,7 +23,8 @@
     {
       formatter = forAllSystems (pkgs: pkgs.nixfmt-tree);
 
-      packages = forAllSystems (pkgs:
+      packages = forAllSystems (
+        pkgs:
         let
           nginxConfigFile = builtins.readFile ./config/nginx.conf;
           nginxConfig = pkgs.writeTextFile {
@@ -68,18 +69,39 @@
             php-fpm -p / &&
             nginx -c /conf/wp-nginx.conf
           '';
-        in {
+          linkPkgs =
+            name: path: pkgsToLink:
+            pkgs.runCommand name { } (
+              pkgs.lib.strings.concatStringsSep "\n" (
+                builtins.map (pkg: "mkdir -p $out/${path} && ln -s ${pkg} $out/${path}/${pkg.name}") pkgsToLink
+              )
+            );
+          themes = linkPkgs "themes" "share/wordpress/wp-content/themes" (
+            with pkgs;
+            [
+              wordpressPackages.themes.twentytwentyfive
+              wordpressPackages.themes.twentytwentyfour
+            ]
+          );
+          plugins = linkPkgs "plugins" "share/wordpress/wp-content/plugins" (
+            with pkgs;
+            [
+              wordpressPackages.plugins.hello-dolly
+            ]
+          );
+        in
+        {
           docker = pkgs.dockerTools.buildLayeredImage {
             name = "ocf-wordpress-core";
             tag = "latest";
 
-            contents = [
-              pkgs.bash
-              pkgs.coreutils
-              pkgs.vim
-              pkgs.wp-cli
-              pkgs.gnugrep
-              pkgs.mariadb
+            contents = with pkgs; [
+              bash
+              coreutils
+              vim
+              wp-cli
+              gnugrep
+              mariadb
 
               nginxConfig
               phpFpmConfig
@@ -88,11 +110,14 @@
 
               #pkgs.wordpress
               wpWithConfig
-              pkgs.nginx
-              pkgs.php
+              nginx
+              php
 
-              pkgs.dockerTools.fakeNss
-              pkgs.dockerTools.binSh
+              dockerTools.fakeNss
+              dockerTools.binSh
+
+              themes
+              plugins
             ];
 
             #extraCommands = "mkdir var/log/nginx";
@@ -105,6 +130,7 @@
               Cmd = [ "${startup}/bin/startup-wp" ];
             };
           };
-      });
+        }
+      );
     };
 }
