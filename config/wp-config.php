@@ -1,55 +1,12 @@
 <?php
-/**
- * The base configuration for WordPress
- *
- * The wp-config.php creation script uses this file during the installation.
- * You don't have to use the website, you can copy this file to "wp-config.php"
- * and fill in the values.
- *
- * This file contains the following configurations:
- *
- * * Database settings
- * * Secret keys
- * * Database table prefix
- * * ABSPATH
- *
- * @link https://developer.wordpress.org/advanced-administration/wordpress/wp-config/
- *
- * @package WordPress
- */
-
-// ** Database settings - You can get this info from your web host ** //
-/** The name of the database for WordPress */
-
 /** TODO should be handled properly, possibly by k8s secrets? */
 define( 'DB_NAME', 'meow' );
-
-/** Database username */
 define( 'DB_USER', 'meowuser' );
-
-/** Database password */
 define( 'DB_PASSWORD', 'meowpassword' );
-
-/** Database hostname */
 define( 'DB_HOST', 'mariadb' );
-
-/** Database charset to use in creating database tables. */
 define( 'DB_CHARSET', 'utf8mb4' );
-
-/** The database collate type. Don't change this if in doubt. */
 define( 'DB_COLLATE', '' );
 
-/**#@+
- * Authentication unique keys and salts.
- *
- * Change these to different unique phrases! You can generate these using
- * the {@link https://api.wordpress.org/secret-key/1.1/salt/ WordPress.org secret-key service}.
- *
- * You can change these at any point in time to invalidate all existing cookies.
- * This will force all users to have to log in again.
- *
- * @since 2.6.0
- */
 define( 'AUTH_KEY',         '%[-r;yx~VQMmH9sw=5O4)aYolAe:-,;80{u_@r`VG>S!z`;+v@wL?/-utAD@c~Mh' );
 define( 'SECURE_AUTH_KEY',  'SH$~~}~EKx)blD~Z@U*B0eyt+E~&$Z{|So$bTNTUr.iZx<<,P@IZA[|cPBX; Qy5' );
 define( 'LOGGED_IN_KEY',    'S Ny_w{@9=CNhcV7-N^D/>v|5/K=j;x6,xRY<#H(FObZ3Mf#+x$cKDC!qcKsbW##' );

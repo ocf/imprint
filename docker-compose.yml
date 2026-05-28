@@ -5,7 +5,7 @@ services:
     ports:
       - 8080:8080
     volumes:
-      - wordpress:/var/www/html
+      - wp-uploads:/share/wordpress/wp-content/uploads
     tmpfs:
       /tmp
   mariadb:
@@ -16,10 +16,10 @@ services:
       MARIADB_USER: meowuser
       MARIADB_PASSWORD: meowpassword
       MARIADB_RANDOM_ROOT_PASSWORD: '1'
-    #volumes:
-    #  - db:/var/lib/mysql
-    tmpfs:
-      /var/lib/mysql
+    volumes:
+      - db:/var/lib/mysql
+    #tmpfs:
+    #  /var/lib/mysql
 volumes:
-  wordpress:
-  #db:
+  wp-uploads:
+  db:
