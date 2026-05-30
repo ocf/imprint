@@ -1,0 +1,23 @@
+name: Build Image
+
+on:
+  push:
+
+concurrency:
+  group: build-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check-flake:
+    runs-on: ci-ocf-wordpress
+    steps:
+      - uses: actions/checkout@v5
+      - uses: DeterminateSystems/flake-checker-action@v9
+
+  build:
+    runs-on: ci-ocf-wordpress
+    needs: check-flake
+    steps:
+      - uses: actions/checkout@v5
+      - name: Build image
+        run: sh $(nix build .#image --no-link --print-out-paths) > /dev/null
