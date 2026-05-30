@@ -1,7 +1,7 @@
 # OCF Wordpress
 
 For development, the image can be built and added to Docker with the following command:
-`nix build .#docker && docker load < result`
+`nix build .#docker && docker tag $(docker load -q < result | grep --only-matching -e 'ocf-wordpress-core:.*$') ocf-wordpress-core:latest`
 
 A docker compose file is provided as a testing environment. This should never be used in any production setting or exposed publicly. You can start this by running:
 `docker compose up -d`

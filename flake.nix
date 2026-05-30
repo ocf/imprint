@@ -19,6 +19,7 @@
 
   outputs =
     {
+      self,
       nixpkgs,
       systems,
       ...
@@ -33,6 +34,11 @@
       packages = forAllSystems (
         pkgs:
         let
+          timestamp = builtins.readFile (
+            pkgs.runCommand "timestamp" { } ''
+              date --date='@${builtins.toString self.lastModified}' --iso-8601=minutes > $out
+            ''
+          );
           mkShAppInputs =
             name: runtimeInputs:
             pkgs.writeShellApplication {
@@ -92,7 +98,8 @@
         {
           docker = pkgs.dockerTools.buildLayeredImage {
             name = "ocf-wordpress-core";
-            tag = "latest";
+            created = timestamp;
+            mtime = timestamp;
 
             contents = with pkgs; [
               # development convenience
