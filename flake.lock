@@ -32,8 +32,10 @@
         "type": "github"
       },
       "original": {
-        "id": "systems",
-        "type": "indirect"
+        "owner": "nix-systems",
+        "ref": "main",
+        "repo": "default",
+        "type": "github"
       }
     }
   },
