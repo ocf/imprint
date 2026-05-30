@@ -59,7 +59,7 @@
             mkdir var/log/nginx
           '';
           cleanupRoot = pkgs.writeShellScriptBin "cleanup-wp-root" ''
-            chown -R nobody:nogroup share/wordpress 
+            chown -R nobody:nogroup share/wordpress && chmod 500 -R share/wordpress
           '';
           startup = pkgs.writeShellScriptBin "startup-wp" ''
             set -e

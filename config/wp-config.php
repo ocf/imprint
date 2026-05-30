@@ -18,11 +18,21 @@ define( 'NONCE_SALT',       'tI_/:{3S|K#$`nr:BZ!F@$vy%?6N-]-?C6!-%:*EorBQTFNnw+-
 
 $table_prefix = 'wp_';
 
+# Errors should be logged, but not shown to the user
 define( 'WP_DEBUG', true );
-define( 'WP_DEBUG_LOG', '/tmp/wp-errors.log' );
+define( 'WP_DEBUG_LOG', '/var/log/wp-errors.log' );
+define( 'WP_DEBUG_DISPLAY', false );
 
 # Must be set, otherwise Wordpress tries to find it in the nix store
 define( 'WP_CONTENT_DIR', '/share/wordpress/wp-content' );
+
+# The install/themes/plugins are constant and cannot be updated by the user
+define( 'AUTOMATIC_UPDATED_DISABLED', true );
+define( 'WP_AUTO_UPDATE_CORE', false );
+define( 'DISALLOW_FILE_MODS', true );
+
+# Requests to wordpress.org will fail and cause slowdowns otherwise
+define( 'WP_HTTP_BLOCK_EXTERNAL', true );
 
 /** Absolute path to the WordPress directory. */
 if ( ! defined( 'ABSPATH' ) ) {
