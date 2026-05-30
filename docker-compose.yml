@@ -1,16 +1,20 @@
 services:
   wordpress:
     image: ocf-wordpress-core:latest
-    restart: always
+    restart: unless-stopped
     ports:
       - 8080:8080
     volumes:
       - wp-uploads:/share/wordpress/wp-content/uploads
     tmpfs:
       /tmp
+    depends_on:
+      mariadb:
+        condition: service_healthy
+        restart: true
   mariadb:
     image: mariadb:latest
-    restart: always
+    restart: unless-stopped
     environment:
       MARIADB_DATABASE: meow
       MARIADB_USER: meowuser
@@ -20,6 +24,11 @@ services:
       - db:/var/lib/mysql
     #tmpfs:
     #  /var/lib/mysql
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
 volumes:
   wp-uploads:
   db:
