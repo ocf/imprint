@@ -96,19 +96,13 @@
             tag = "latest";
 
             contents = with pkgs; [
-              bash
               coreutils
-              vim
               wp-cli
-              gnugrep
-              mariadb
 
               nginxConfig
               phpFpmConfig
               poolConfig
-              #wpConfig
 
-              #pkgs.wordpress
               wpWithConfig
               nginx
               php
@@ -120,7 +114,6 @@
               plugins
             ];
 
-            #extraCommands = "mkdir var/log/nginx";
             extraCommands = "${cleanup}/bin/cleanup-wp";
 
             fakeRootCommands = "${cleanupRoot}/bin/cleanup-wp-root";
