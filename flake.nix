@@ -69,21 +69,21 @@
             php-fpm -p / &&
             nginx -c /conf/wp-nginx.conf
           '';
-          linkPkgs =
+          linkWordpressPkgs =
             name: path: pkgsToLink:
             pkgs.runCommand name { } (
               pkgs.lib.strings.concatStringsSep "\n" (
-                builtins.map (pkg: "mkdir -p $out/${path} && ln -s ${pkg} $out/${path}/${pkg.name}") pkgsToLink
+                builtins.map (pkg: "mkdir -p $out/${path} && ln -s ${pkg} $out/${path}/${pkg.wpName}") pkgsToLink
               )
             );
-          themes = linkPkgs "themes" "share/wordpress/wp-content/themes" (
+          themes = linkWordpressPkgs "themes" "share/wordpress/wp-content/themes" (
             with pkgs;
             [
               wordpressPackages.themes.twentytwentyfive
               wordpressPackages.themes.twentytwentyfour
             ]
           );
-          plugins = linkPkgs "plugins" "share/wordpress/wp-content/plugins" (
+          plugins = linkWordpressPkgs "plugins" "share/wordpress/wp-content/plugins" (
             with pkgs;
             [
               wordpressPackages.plugins.hello-dolly
