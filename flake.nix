@@ -8,6 +8,13 @@
       repo = "nixpkgs";
       ref = "nixos-25.11";
     };
+
+    systems = {
+      type = "github";
+      owner = "nix-systems";
+      repo = "default";
+      ref = "main";
+    };
   };
 
   outputs =
@@ -26,67 +33,56 @@
       packages = forAllSystems (
         pkgs:
         let
-          nginxConfigFile = builtins.readFile ./config/nginx.conf;
-          nginxConfig = pkgs.writeTextFile {
-            name = "nginx.conf";
-            text = nginxConfigFile;
-            destination = "/conf/wp-nginx.conf";
-          };
-          phpFpmConfigFile = builtins.readFile ./config/php-fpm.conf;
-          poolConfigFile = builtins.readFile ./config/wordpress-pool.conf;
-          phpFpmConfig = pkgs.writeTextFile {
-            name = "php-fpm.conf";
-            text = phpFpmConfigFile;
-            destination = "/etc/php-fpm.conf";
-          };
-          poolConfig = pkgs.writeTextFile {
-            name = "wordpress-pool.conf";
-            text = poolConfigFile;
-            destination = "/etc/php-fpm.d/wordpress-pool.conf";
-          };
-          wpConfigFile = builtins.readFile ./config/wp-config.php;
-          wpConfig = pkgs.writeTextFile {
-            name = "wp-config.php";
-            text = wpConfigFile;
-            destination = "/share/wordpress/wp-config-template.php";
-          };
+          mkShAppInputs =
+            name: runtimeInputs:
+            pkgs.writeShellApplication {
+              inherit name;
+              runtimeInputs = [ pkgs.busybox ] ++ runtimeInputs;
+              text = builtins.readFile ./bin/${name};
+            };
+          mkShApp = name: mkShAppInputs name [ ];
+          mkConfig =
+            name: destination:
+            pkgs.writeTextFile {
+              inherit name destination;
+              text = builtins.readFile ./config/${name};
+            };
+          mkWpContent =
+            name: pkgsToLink:
+            let
+              path = "share/wordpress/wp-content/${name}";
+            in
+            pkgs.runCommand name { } ''
+              mkdir -p $out/${path}
+              ${pkgs.lib.concatMapStrings (pkg: "ln -s ${pkg} $out/${path}/${pkg.wpName}\n") pkgsToLink}
+            '';
+
+          nginxConfig = mkConfig "nginx.conf" "/conf/wp-nginx.conf";
+          phpFpmConfig = mkConfig "php-fpm.conf" "/etc/php-fpm.conf";
+          poolConfig = mkConfig "wordpress-pool.conf" "/etc/php-fpm.d/wordpress-pool.conf";
+          wpConfig = mkConfig "wp-config.php" "/share/wordpress/wp-config-template.php";
+
           wpWithConfig = pkgs.wordpress.overrideAttrs (old: {
             postInstall = ''
               cp ${wpConfig}/share/wordpress/wp-config-template.php $out/share/wordpress/wp-config.php
             '';
           });
-          cleanup = pkgs.writeShellScriptBin "cleanup-wp" ''
-            mkdir var/log/nginx
-          '';
-          cleanupRoot = pkgs.writeShellScriptBin "cleanup-wp-root" ''
-            chown -R nobody:nogroup share/wordpress && chmod 500 -R share/wordpress
-          '';
-          startup = pkgs.writeShellScriptBin "startup-wp" ''
-            set -e
-            if ! wp core is-installed 2>/dev/null; then
-              ${pkgs.wp-cli}/bin/wp core install --url="localhost:8080" --title="OCF WordPress Template" --admin_user=admin --admin_password="$(tr -dc '[:alnum:]' < /dev/urandom | head -c256)" --admin_email="wp-admin@ocf.berkeley.edu" --allow-root
-            fi
-            php-fpm -p / &&
-            nginx -c /conf/wp-nginx.conf
-          '';
-          linkWordpressPkgs =
-            name: path: pkgsToLink:
-            pkgs.runCommand name { } (
-              pkgs.lib.strings.concatStringsSep "\n" (
-                builtins.map (pkg: "mkdir -p $out/${path} && ln -s ${pkg} $out/${path}/${pkg.wpName}") pkgsToLink
-              )
-            );
-          themes = linkWordpressPkgs "themes" "share/wordpress/wp-content/themes" (
-            with pkgs;
+
+          cleanup = mkShApp "cleanup-wp";
+          cleanupRoot = mkShApp "cleanup-wp-root";
+          startup = mkShAppInputs "startup-wp" [ pkgs.wp-cli ];
+
+          themes = mkWpContent "themes" (
+            with pkgs.wordpressPackages.themes;
             [
-              wordpressPackages.themes.twentytwentyfive
-              wordpressPackages.themes.twentytwentyfour
+              twentytwentyfive
+              twentytwentyfour
             ]
           );
-          plugins = linkWordpressPkgs "plugins" "share/wordpress/wp-content/plugins" (
-            with pkgs;
+          plugins = mkWpContent "plugins" (
+            with pkgs.wordpressPackages.plugins;
             [
-              wordpressPackages.plugins.hello-dolly
+              hello-dolly
             ]
           );
         in
@@ -96,9 +92,6 @@
             tag = "latest";
 
             contents = with pkgs; [
-              coreutils
-              wp-cli
-
               nginxConfig
               phpFpmConfig
               poolConfig
@@ -115,7 +108,6 @@
             ];
 
             extraCommands = "${cleanup}/bin/cleanup-wp";
-
             fakeRootCommands = "${cleanupRoot}/bin/cleanup-wp-root";
 
             config = {

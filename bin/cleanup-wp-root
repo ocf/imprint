@@ -1,0 +1,2 @@
+#!/bin/sh
+chown -R nobody:nogroup share/wordpress && chmod 500 -R share/wordpress
