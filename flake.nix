@@ -60,11 +60,14 @@
           nginxConfig = mkConfig "nginx.conf" "/conf/wp-nginx.conf";
           phpFpmConfig = mkConfig "php-fpm.conf" "/etc/php-fpm.conf";
           poolConfig = mkConfig "wordpress-pool.conf" "/etc/php-fpm.d/wordpress-pool.conf";
-          wpConfig = mkConfig "wp-config.php" "/share/wordpress/wp-config-template.php";
+          wpConfig = mkConfig "wp-config.php" "/share/wordpress/wp-config.php";
 
+          # WordPress determines its install location via the ABSPATH php constant, which is set based
+          # on the location of the .php scripts. Overriding the WordPress package to add our config
+          # to it is the simplest and most consistent solution.
           wpWithConfig = pkgs.wordpress.overrideAttrs (old: {
             postInstall = ''
-              cp ${wpConfig}/share/wordpress/wp-config-template.php $out/share/wordpress/wp-config.php
+              cp ${wpConfig}/share/wordpress/wp-config.php $out/share/wordpress/wp-config.php
             '';
           });
 
@@ -92,6 +95,10 @@
             tag = "latest";
 
             contents = with pkgs; [
+              # development convenience
+              wp-cli
+              busybox
+
               nginxConfig
               phpFpmConfig
               poolConfig
