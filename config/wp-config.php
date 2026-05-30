@@ -27,7 +27,7 @@ define( 'WP_DEBUG_DISPLAY', false );
 define( 'WP_CONTENT_DIR', '/share/wordpress/wp-content' );
 
 # The install/themes/plugins are constant and cannot be updated by the user
-define( 'AUTOMATIC_UPDATED_DISABLED', true );
+define( 'AUTOMATIC_UPDATER_DISABLED', true );
 define( 'WP_AUTO_UPDATE_CORE', false );
 define( 'DISALLOW_FILE_MODS', true );
 
