@@ -96,7 +96,7 @@
           );
         in
         {
-          docker = pkgs.dockerTools.buildLayeredImage {
+          image = pkgs.dockerTools.streamLayeredImage {
             name = "ocf-wordpress-core";
             created = timestamp;
             mtime = timestamp;
