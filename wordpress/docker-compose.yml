@@ -2,6 +2,11 @@ services:
   wordpress:
     image: ocf-wordpress-core:latest
     restart: unless-stopped
+    environment:
+      DB_NAME: meow
+      DB_USER: meowuser
+      DB_PASSWORD: meowpassword
+      DB_HOST: mariadb
     ports:
       - 8080:8080
     volumes:
