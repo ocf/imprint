@@ -10,6 +10,10 @@ env:
   image_name: ocf-wordpress-core
   registry: ghcr.io/${{ github.repository_owner }}
 
+defaults:
+  run:
+    working-directory: ./wordpress
+
 jobs:
   publish:
     # requires setting up a proper environment in the runner

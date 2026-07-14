@@ -1,0 +1,13 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: imprint
+  namespace: argocd
+spec:
+  destination:
+    server: https://kubernetes.default.svc
+  project: imprint
+  source:
+    path: manifests/apps
+    repoURL: https://github.com/ocf/imprint.git
+
