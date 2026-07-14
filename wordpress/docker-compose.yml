@@ -2,6 +2,12 @@ services:
   wordpress:
     image: ocf-wordpress-core:latest
     restart: unless-stopped
+    environment:
+      DB_NAME: test-db
+      DB_USER: test-user
+      DB_PASSWORD: test-password
+      DB_HOST: mariadb
+      PRIMARY_URL: http://localhost:8080
     ports:
       - 8080:8080
     volumes:
@@ -16,9 +22,9 @@ services:
     image: mariadb:latest
     restart: unless-stopped
     environment:
-      MARIADB_DATABASE: meow
-      MARIADB_USER: meowuser
-      MARIADB_PASSWORD: meowpassword
+      MARIADB_DATABASE: test-db
+      MARIADB_USER: test-user
+      MARIADB_PASSWORD: test-password
       MARIADB_RANDOM_ROOT_PASSWORD: '1'
     volumes:
       - db:/var/lib/mysql

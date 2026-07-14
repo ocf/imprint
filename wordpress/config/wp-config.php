@@ -1,9 +1,9 @@
 <?php
 /** TODO should be handled properly, possibly by k8s secrets? */
-define( 'DB_NAME', 'meow' );
-define( 'DB_USER', 'meowuser' );
-define( 'DB_PASSWORD', 'meowpassword' );
-define( 'DB_HOST', 'mariadb' );
+define( 'DB_NAME', getenv('DB_NAME') );
+define( 'DB_USER', getenv('DB_USER') );
+define( 'DB_PASSWORD', getenv('DB_PASSWORD') );
+define( 'DB_HOST', getenv('DB_HOST') );
 define( 'DB_CHARSET', 'utf8mb4' );
 define( 'DB_COLLATE', '' );
 
@@ -17,6 +17,10 @@ define( 'LOGGED_IN_SALT',   'Cs2VkXBuj7GpGAe$3TeVZ,Sgm[XrQQ&CeC/EtWw[Na[Sb3@`oip
 define( 'NONCE_SALT',       'tI_/:{3S|K#$`nr:BZ!F@$vy%?6N-]-?C6!-%:*EorBQTFNnw+-ML+W0%I^>oHm2' );
 
 $table_prefix = 'wp_';
+
+# Override WordPress URL by environment variable
+define( 'WP_SITEURL', getenv('PRIMARY_URL') );
+define( 'WP_HOME', getenv('PRIMARY_URL') );
 
 # Errors should be logged, but not shown to the user
 define( 'WP_DEBUG', true );
