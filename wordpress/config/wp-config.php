@@ -30,6 +30,8 @@ define( 'WP_DEBUG_DISPLAY', false );
 # Must be set, otherwise Wordpress tries to find it in the nix store
 define( 'WP_CONTENT_DIR', '/share/wordpress/wp-content' );
 
+define( 'FORCE_ADMIN_SSL', false );
+
 # The install/themes/plugins are constant and cannot be updated by the user
 define( 'AUTOMATIC_UPDATER_DISABLED', true );
 define( 'WP_AUTO_UPDATE_CORE', false );
