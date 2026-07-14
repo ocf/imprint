@@ -18,6 +18,10 @@ define( 'NONCE_SALT',       'tI_/:{3S|K#$`nr:BZ!F@$vy%?6N-]-?C6!-%:*EorBQTFNnw+-
 
 $table_prefix = 'wp_';
 
+# Override WordPress URL by environment variable
+define( 'WP_SITEURL', getenv('PRIMARY_URL') );
+define( 'WP_HOME', getenv('PRIMARY_URL') );
+
 # Errors should be logged, but not shown to the user
 define( 'WP_DEBUG', true );
 define( 'WP_DEBUG_LOG', '/var/log/wp-errors.log' );
