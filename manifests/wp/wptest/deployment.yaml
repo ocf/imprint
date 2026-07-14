@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wordpress
+  namespace: wptest
+  labels:
+    wptest: meow
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      wptest: meow
+  template:
+    metadata:
+      labels:
+        wptest: meow
+    spec:
+      containers:
+        - name: wordpress-core
+          image: ghcr.io/ocf/ocf-wordpress-core:3jr6bqazqba3jsnnmvs1z4wl2c7ammg6
+          volumeMounts:
+          - mountPath: /tmp
+            name: tmp
+          - mountPath: /share/wordpress/wp-content/uploads
+            name: uploads
+            subPath: wp-test
+          ports:
+          - containerPort: 8080
+          envFrom:
+          - secretRef:
+              name: wp-config-secret
+      volumes:
+      - name: uploads
+        persistentVolumeClaim:
+          claimName: wptest
+      - name: tmp
+        emptyDir: 
+          sizeLimit: 500Mi
+

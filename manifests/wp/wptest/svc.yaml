@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: wptest
+  namespace: wptest
+spec:
+  ports:
+  - port: 80
+    targetPort: 8080
+  selector:
+    wptest: meow
+
