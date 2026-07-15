@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: content
+  namespace: wordpress
+spec:
+  accessModes:
+  - ReadWriteMany
+  resources:
+    requests:
+      storage: 32Gi
+  storageClassName: cephfs-nvme
