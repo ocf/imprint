@@ -71,7 +71,7 @@
           mkWpContent =
             name: pkgsToLink:
             let
-              path = "share/wordpress/wp-content/${name}";
+              path = "share/wordpress/${name}";
             in
             pkgs.runCommand name { } ''
               mkdir -p $out/${path}
