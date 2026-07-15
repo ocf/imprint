@@ -4,9 +4,9 @@
   inputs = {
     nixpkgs = {
       type = "github";
-      owner = "nixos";
+      owner = "sophiebsw";
       repo = "nixpkgs";
-      ref = "nixos-25.11";
+      ref = "fix-wordpress-overriding-26.05";
     };
 
     systems = {
@@ -25,18 +25,33 @@
       ...
     }:
     let
-      pkgsFor = system: import nixpkgs { inherit system; };
+      extraPlugins = builtins.fromJSON (builtins.readFile ./pkgs/extraPlugins.json);
+      extraPluginLicenses = nixpkgs.lib.genAttrs (nixpkgs.lib.attrNames extraPlugins) (name: "free");
+
+      overlays = nixpkgs.lib.singleton (
+        final: prev: {
+          wordpressPackages = prev.wordpressPackages.override (prev: {
+            plugins = prev.plugins // extraPlugins;
+            pluginLicenses = prev.pluginLicenses // extraPluginLicenses;
+          });
+        }
+      );
+
+      pkgsFor = system: import nixpkgs { inherit system overlays; };
       forAllSystems = fn: nixpkgs.lib.genAttrs (import systems) (system: fn (pkgsFor system));
+
     in
     {
+      inherit extraPluginLicenses;
       formatter = forAllSystems (pkgs: pkgs.nixfmt-tree);
+      wordpress = forAllSystems (pkgs: pkgs.wordpressPackages);
 
       packages = forAllSystems (
         pkgs:
         let
           timestamp = builtins.readFile (
             pkgs.runCommand "timestamp" { } ''
-              date --date='@${builtins.toString self.lastModified}' --iso-8601=minutes > $out
+              date --date='@${toString self.lastModified}' --iso-8601=minutes > $out
             ''
           );
           mkShAppInputs =
@@ -91,7 +106,15 @@
           plugins = mkWpContent "plugins" (
             with pkgs.wordpressPackages.plugins;
             [
-              hello-dolly
+              duplicate-page
+              elementor
+              gtranslate
+              themeisle-companion
+              updraftplus
+              wordpress-importer
+              wpforms-lite
+              wp-migrate-db
+              wpvivid-backuprestore
             ]
           );
         in
