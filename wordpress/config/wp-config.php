@@ -36,7 +36,7 @@ define( 'WP_AUTO_UPDATE_CORE', false );
 define( 'DISALLOW_FILE_MODS', true );
 
 # Requests to wordpress.org will fail and cause slowdowns otherwise
-define( 'WP_HTTP_BLOCK_EXTERNAL', true );
+#define( 'WP_HTTP_BLOCK_EXTERNAL', true );
 
 /** Absolute path to the WordPress directory. */
 if ( ! defined( 'ABSPATH' ) ) {
