@@ -1,0 +1,50 @@
+{
+  "duplicate-page": {
+    "path": "duplicate-page/trunk",
+    "rev": "3526446",
+    "sha256": "1nan631k8qbps5fkxlcr933zkccpn8brb6x0w77w0fzw75way60f",
+    "version": "4.5.9"
+  },
+  "elementor": {
+    "path": "elementor/tags/4.1.5",
+    "rev": "3607642",
+    "sha256": "068lhbjaj0qglv0jrmsyv4f52nl89wn3d6hjipgbbjy2i27pd4v5",
+    "version": "4.1.5"
+  },
+  "gtranslate": {
+    "path": "gtranslate/tags/3.1.1",
+    "rev": "3562536",
+    "sha256": "1nzw8971g50qkg88jl908i3mbp3ql4ia6fchv8l6aqjl43hqiff0",
+    "version": "3.1.1"
+  },
+  "themeisle-companion": {
+    "path": "themeisle-companion/tags/3.0.7",
+    "rev": "3574306",
+    "sha256": "1ygpy6xn21fkb85pmya5qpbkcjyh0kp44dplj9iyg1cksa1nwb72",
+    "version": "3.0.7"
+  },
+  "updraftplus": {
+    "path": "updraftplus/tags/1.26.5",
+    "rev": "3561938",
+    "sha256": "04pggb1fy41js01b8fwfx7d15jbb1gj14grx16rx6bq2h24wixd4",
+    "version": "1.26.5"
+  },
+  "wordpress-importer": {
+    "path": "wordpress-importer/tags/0.9.5",
+    "rev": "3390741",
+    "sha256": "05j6jbjs0yhg4im5z65r6960waxydgcd1vxpaq17sr2l6zlc3y2z",
+    "version": "0.9.5"
+  },
+  "wp-migrate-db": {
+    "path": "wp-migrate-db/tags/2.7.10",
+    "rev": "3591679",
+    "sha256": "19fxfqxx91fmscvakvvpjg2x8jf8fjcp884c9yygdra0224rsdky",
+    "version": "2.7.10"
+  },
+  "wpvivid-backuprestore": {
+    "path": "wpvivid-backuprestore/tags/0.9.130",
+    "rev": "3600930",
+    "sha256": "1p7qm1wqy6zdh7rnkrbzwk03ylj1mv96dg0286ligy0rf9pmr0k6",
+    "version": "0.9.130"
+  }
+}
