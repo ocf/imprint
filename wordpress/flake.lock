@@ -10,8 +10,8 @@
         "type": "github"
       },
       "original": {
-        "owner": "nixos",
-        "ref": "nixos-25.11",
+        "owner": "sophiebsw",
+        "ref": "fix-wordpress-overriding-26.05",
         "repo": "nixpkgs",
         "type": "github"
       }
