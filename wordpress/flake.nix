@@ -89,6 +89,7 @@
           wpWithConfig = pkgs.wordpress.overrideAttrs (old: {
             postInstall = ''
               cp ${wpConfig}/share/wordpress/wp-config.php $out/share/wordpress/wp-config.php
+              rm -r $out/share/wordpress/wp-content
             '';
           });
 
