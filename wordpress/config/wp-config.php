@@ -36,6 +36,8 @@ define( 'AUTOMATIC_UPDATER_DISABLED', true );
 define( 'WP_AUTO_UPDATE_CORE', false );
 define( 'DISALLOW_FILE_MODS', true );
 
+define( 'FS_METHOD', 'direct' );
+
 # Requests to wordpress.org will fail and cause slowdowns otherwise
 #define( 'WP_HTTP_BLOCK_EXTERNAL', true );
 
