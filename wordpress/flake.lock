@@ -2,16 +2,16 @@
   "nodes": {
     "nixpkgs": {
       "locked": {
-        "lastModified": 1778737229,
-        "narHash": "sha256-6xWoytx8jFW4PF1GjRm/i/53trbpKGfz6zjzQGBr4cI=",
-        "owner": "nixos",
+        "lastModified": 1784102590,
+        "narHash": "sha256-iscXnkGy+JGJHVw3I1f7Bh6KU+/JzMyN40yh5tLKr+U=",
+        "owner": "sophiebsw",
         "repo": "nixpkgs",
-        "rev": "d7a713c0b7e47c908258e71cba7a2d77cc8d71d5",
+        "rev": "bd84bf37374670140aabcd32af4c4560f9454035",
         "type": "github"
       },
       "original": {
-        "owner": "nixos",
-        "ref": "nixos-25.11",
+        "owner": "sophiebsw",
+        "ref": "fix-wordpress-overriding-26.05",
         "repo": "nixpkgs",
         "type": "github"
       }

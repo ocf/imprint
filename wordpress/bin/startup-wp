@@ -1,5 +1,10 @@
 #!/bin/sh
 set -e
+#cp -rnT /share/wordpress/themes /content/themes
+ln -snf /share/wordpress/themes /content/themes
+ln -snf /share/wordpress/plugins /content/plugins
+ln -snf /uploads /content/uploads
+ln -snf /content /share/wordpress/wp-content
 if ! wp core is-installed 2>/dev/null; then
   wp core install --url="$PRIMARY_URL" --title="OCF WordPress Template" --admin_user=admin --admin_password="$(tr -dc '[:alnum:]' < /dev/urandom | head -c256)" --admin_email="wp-admin@ocf.berkeley.edu" --allow-root
 fi
