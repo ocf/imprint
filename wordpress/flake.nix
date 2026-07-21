@@ -27,12 +27,16 @@
     let
       extraPlugins = builtins.fromJSON (builtins.readFile ./pkgs/extraPlugins.json);
       extraPluginLicenses = nixpkgs.lib.genAttrs (nixpkgs.lib.attrNames extraPlugins) (name: "free");
+      extraThemes = builtins.fromJSON (builtins.readFile ./pkgs/extraThemes.json);
+      extraThemeLicenses = nixpkgs.lib.genAttrs (nixpkgs.lib.attrNames extraThemes) (name: "free");
 
       overlays = nixpkgs.lib.singleton (
         final: prev: {
           wordpressPackages = prev.wordpressPackages.override (prev: {
             plugins = prev.plugins // extraPlugins;
             pluginLicenses = prev.pluginLicenses // extraPluginLicenses;
+            themes = prev.themes // extraThemes;
+            themeLicenses = prev.themeLicenses // extraThemeLicenses;
           });
         }
       );
@@ -102,6 +106,7 @@
             [
               twentytwentyfive
               twentytwentyfour
+              hestia
             ]
           );
           plugins = mkWpContent "plugins" (

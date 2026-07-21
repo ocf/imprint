@@ -1,0 +1,8 @@
+{
+  "hestia": {
+    "path": "hestia/3.3.4",
+    "rev": "329715",
+    "sha256": "1cfcghavqaxl5b2dl5i5mn7ibfg1k91hddpkar1abchjscaq43qj",
+    "version": "3.3.4"
+  }
+}
