@@ -1,0 +1,14 @@
+{
+  "elementor": {
+    "path": "elementor/tags/4.2.4",
+    "rev": "3674525",
+    "sha256": "1hzwqsa1p2lddy034hhrfs1gkw3q20np90lvpxrm331hzz2f1jik",
+    "version": "4.2.4"
+  },
+  "gtranslate": {
+    "path": "gtranslate/tags/3.1.2",
+    "rev": "3674542",
+    "sha256": "1fp21g0kanq2sl6zcyhs46ah4y8y7p9sswn903m0y6cmi5i6g9sb",
+    "version": "3.1.2"
+  }
+}

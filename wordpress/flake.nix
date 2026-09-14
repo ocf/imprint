@@ -4,9 +4,9 @@
   inputs = {
     nixpkgs = {
       type = "github";
-      owner = "nixos";
+      owner = "sophiebsw";
       repo = "nixpkgs";
-      ref = "nixos-25.11";
+      ref = "wordpress-fix-overriding-26.05";
     };
 
     systems = {
@@ -25,18 +25,37 @@
       ...
     }:
     let
-      pkgsFor = system: import nixpkgs { inherit system; };
+      extraPlugins = builtins.fromJSON (builtins.readFile ./pkgs/extraPlugins.json);
+      extraPluginLicenses = nixpkgs.lib.genAttrs (nixpkgs.lib.attrNames extraPlugins) (name: "free");
+      extraThemes = builtins.fromJSON (builtins.readFile ./pkgs/extraThemes.json);
+      extraThemeLicenses = nixpkgs.lib.genAttrs (nixpkgs.lib.attrNames extraThemes) (name: "free");
+
+      overlays = nixpkgs.lib.singleton (
+        final: prev: {
+          wordpressPackages = prev.wordpressPackages.override (prev: {
+            plugins = prev.plugins // extraPlugins;
+            pluginLicenses = prev.pluginLicenses // extraPluginLicenses;
+            themes = prev.themes // extraThemes;
+            themeLicenses = prev.themeLicenses // extraThemeLicenses;
+          });
+        }
+      );
+
+      pkgsFor = system: import nixpkgs { inherit system overlays; };
       forAllSystems = fn: nixpkgs.lib.genAttrs (import systems) (system: fn (pkgsFor system));
+
     in
     {
+      inherit extraPluginLicenses;
       formatter = forAllSystems (pkgs: pkgs.nixfmt-tree);
+      wordpress = forAllSystems (pkgs: pkgs.wordpressPackages);
 
       packages = forAllSystems (
         pkgs:
         let
           timestamp = builtins.readFile (
             pkgs.runCommand "timestamp" { } ''
-              date --date='@${builtins.toString self.lastModified}' --iso-8601=minutes > $out
+              date --date='@${toString self.lastModified}' --iso-8601=minutes > $out
             ''
           );
           mkShAppInputs =
@@ -56,7 +75,7 @@
           mkWpContent =
             name: pkgsToLink:
             let
-              path = "share/wordpress/wp-content/${name}";
+              path = "share/wordpress/${name}";
             in
             pkgs.runCommand name { } ''
               mkdir -p $out/${path}
@@ -71,9 +90,10 @@
           # WordPress determines its install location via the ABSPATH php constant, which is set based
           # on the location of the .php scripts. Overriding the WordPress package to add our config
           # to it is the simplest and most consistent solution.
-          wpWithConfig = pkgs.wordpress.overrideAttrs (old: {
+          wpWithConfig = pkgs.wordpress_7_0.overrideAttrs (old: {
             postInstall = ''
               cp ${wpConfig}/share/wordpress/wp-config.php $out/share/wordpress/wp-config.php
+              rm -r $out/share/wordpress/wp-content
             '';
           });
 
@@ -91,7 +111,8 @@
           plugins = mkWpContent "plugins" (
             with pkgs.wordpressPackages.plugins;
             [
-              hello-dolly
+              elementor
+              gtranslate
             ]
           );
         in

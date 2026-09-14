@@ -28,15 +28,18 @@ define( 'WP_DEBUG_LOG', '/var/log/wp-errors.log' );
 define( 'WP_DEBUG_DISPLAY', false );
 
 # Must be set, otherwise Wordpress tries to find it in the nix store
-define( 'WP_CONTENT_DIR', '/share/wordpress/wp-content' );
+define( 'WP_CONTENT_DIR', '/content' );
+define( 'WP_PLUGIN_DIR', '/share/wordpress/plugins' );
 
 # The install/themes/plugins are constant and cannot be updated by the user
 define( 'AUTOMATIC_UPDATER_DISABLED', true );
 define( 'WP_AUTO_UPDATE_CORE', false );
 define( 'DISALLOW_FILE_MODS', true );
 
+define( 'FS_METHOD', 'direct' );
+
 # Requests to wordpress.org will fail and cause slowdowns otherwise
-define( 'WP_HTTP_BLOCK_EXTERNAL', true );
+#define( 'WP_HTTP_BLOCK_EXTERNAL', true );
 
 /** Absolute path to the WordPress directory. */
 if ( ! defined( 'ABSPATH' ) ) {
