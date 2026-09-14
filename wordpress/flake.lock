@@ -11,7 +11,7 @@
       },
       "original": {
         "owner": "sophiebsw",
-        "ref": "fix-wordpress-overriding-26.05",
+        "ref": "wordpress-fix-overriding-26.05",
         "repo": "nixpkgs",
         "type": "github"
       }

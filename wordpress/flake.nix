@@ -6,7 +6,7 @@
       type = "github";
       owner = "sophiebsw";
       repo = "nixpkgs";
-      ref = "fix-wordpress-overriding-26.05";
+      ref = "wordpress-fix-overriding-26.05";
     };
 
     systems = {
@@ -90,7 +90,7 @@
           # WordPress determines its install location via the ABSPATH php constant, which is set based
           # on the location of the .php scripts. Overriding the WordPress package to add our config
           # to it is the simplest and most consistent solution.
-          wpWithConfig = pkgs.wordpress.overrideAttrs (old: {
+          wpWithConfig = pkgs.wordpress_7_0.overrideAttrs (old: {
             postInstall = ''
               cp ${wpConfig}/share/wordpress/wp-config.php $out/share/wordpress/wp-config.php
               rm -r $out/share/wordpress/wp-content
@@ -106,21 +106,13 @@
             [
               twentytwentyfive
               twentytwentyfour
-              hestia
             ]
           );
           plugins = mkWpContent "plugins" (
             with pkgs.wordpressPackages.plugins;
             [
-              duplicate-page
               elementor
               gtranslate
-              themeisle-companion
-              updraftplus
-              wordpress-importer
-              wpforms-lite
-              wp-migrate-db
-              wpvivid-backuprestore
             ]
           );
         in
