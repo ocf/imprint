@@ -106,6 +106,7 @@
             [
               twentytwentyfive
               twentytwentyfour
+              hestia
             ]
           );
           plugins = mkWpContent "plugins" (
