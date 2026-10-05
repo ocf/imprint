@@ -13,13 +13,13 @@ defaults:
 
 jobs:
   check-flake:
-    runs-on: ci-ocf-wordpress
+    runs-on: ci-ocf-imprint
     steps:
       - uses: actions/checkout@v5
       - uses: DeterminateSystems/flake-checker-action@v9
 
   build:
-    runs-on: ci-ocf-wordpress
+    runs-on: ci-ocf-imprint
     needs: check-flake
     steps:
       - uses: actions/checkout@v5
