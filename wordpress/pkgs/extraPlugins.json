@@ -10,5 +10,11 @@
     "rev": "3674542",
     "sha256": "1fp21g0kanq2sl6zcyhs46ah4y8y7p9sswn903m0y6cmi5i6g9sb",
     "version": "3.1.2"
+  },
+  "header-footer-builder-for-elementor": {
+    "path": "header-footer-builder-for-elementor/tags/1.3.3",
+    "rev": "3729643",
+    "sha256": "sha256-GTCuDsi+b0eidT45Gcy07cbHDGp/Lem0nzudF8JIsYA=",
+    "version": "1.3.3"
   }
 }

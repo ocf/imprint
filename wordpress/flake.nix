@@ -114,6 +114,7 @@
             [
               elementor
               gtranslate
+              header-footer-builder-for-elementor
             ]
           );
         in
