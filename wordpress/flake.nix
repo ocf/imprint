@@ -2,19 +2,8 @@
   description = "OCF WordPress Project";
 
   inputs = {
-    nixpkgs = {
-      type = "github";
-      owner = "nixos";
-      repo = "nixpkgs";
-      ref = "nixos-25.11";
-    };
-
-    systems = {
-      type = "github";
-      owner = "nix-systems";
-      repo = "default";
-      ref = "main";
-    };
+    nixpkgs.url = "https://channels.nixos.org/nixos-26.05/nixexprs.tar.zst";
+    systems.url = "github:nix-systems/default/main";
   };
 
   outputs =
