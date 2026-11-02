@@ -1,0 +1,59 @@
+From f759ac623c879e18eadf45cfc8f96b6186b7a5ef Mon Sep 17 00:00:00 2001
+From: sophiebsw <sophiebsw@gmail.com>
+Date: Wed, 15 Jul 2026 00:55:25 -0700
+Subject: [PATCH] wordpress: add wordpressPackages licenses to args
+
+(cherry picked from commit 1bc4901c5b77f056253efbc673965b2cd39750a9)
+---
+ pkgs/servers/web-apps/wordpress/packages/default.nix | 11 +++++++----
+ pkgs/top-level/all-packages.nix                      |  3 +++
+ 2 files changed, 10 insertions(+), 4 deletions(-)
+
+diff --git a/pkgs/servers/web-apps/wordpress/packages/default.nix b/pkgs/servers/web-apps/wordpress/packages/default.nix
+index c7630cbeb1a5..da47ad26c2e8 100644
+--- a/pkgs/servers/web-apps/wordpress/packages/default.nix
++++ b/pkgs/servers/web-apps/wordpress/packages/default.nix
+@@ -8,6 +8,9 @@
+   plugins,
+   themes,
+   languages,
++  pluginLicenses,
++  themeLicenses,
++  languageLicenses,
+   callPackage,
+ }:
+ 
+@@ -18,12 +21,12 @@ let
+       generatedJson = {
+         inherit plugins themes languages;
+       };
++
+       sourceJson = {
+-        plugins = builtins.fromJSON (builtins.readFile ./wordpress-plugins.json);
+-        themes = builtins.fromJSON (builtins.readFile ./wordpress-themes.json);
+-        languages = builtins.fromJSON (builtins.readFile ./wordpress-languages.json);
++        plugins = pluginLicenses;
++        themes = themeLicenses;
++        languages = languageLicenses;
+       };
+-
+     in
+     {
+       # Create a generic WordPress package. Most arguments are just passed
+diff --git a/pkgs/top-level/all-packages.nix b/pkgs/top-level/all-packages.nix
+index 4f92c24bc156..2c2fdac9353b 100644
+--- a/pkgs/top-level/all-packages.nix
++++ b/pkgs/top-level/all-packages.nix
+@@ -11568,6 +11568,9 @@ with pkgs;
+       plugins = lib.importJSON ../servers/web-apps/wordpress/packages/plugins.json;
+       themes = lib.importJSON ../servers/web-apps/wordpress/packages/themes.json;
+       languages = lib.importJSON ../servers/web-apps/wordpress/packages/languages.json;
++      pluginLicenses = lib.importJSON ../servers/web-apps/wordpress/packages/wordpress-plugins.json;
++      themeLicenses = lib.importJSON ../servers/web-apps/wordpress/packages/wordpress-themes.json;
++      languageLicenses = lib.importJSON ../servers/web-apps/wordpress/packages/wordpress-languages.json;
+     }
+   );
+ 
+-- 
+2.54.0
+

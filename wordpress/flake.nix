@@ -2,19 +2,8 @@
   description = "OCF WordPress Project";
 
   inputs = {
-    nixpkgs = {
-      type = "github";
-      owner = "sophiebsw";
-      repo = "nixpkgs";
-      ref = "wordpress-fix-overriding-26.05";
-    };
-
-    systems = {
-      type = "github";
-      owner = "nix-systems";
-      repo = "default";
-      ref = "main";
-    };
+    nixpkgs.url = "https://channels.nixos.org/nixos-26.05/nixexprs.tar.zst";
+    systems.url = "github:nix-systems/default/main";
   };
 
   outputs =
@@ -41,14 +30,20 @@
         }
       );
 
-      pkgsFor = system: import nixpkgs { inherit system overlays; };
+      pkgsFor = system: let nixpkgs' = nixpkgs.legacyPackages.${system}.applyPatches {
+        name = "wordpress";
+        src = nixpkgs.outPath;
+        patches = [
+          ./0001-wordpress-add-wordpressPackages-licenses-to-args.patch
+        ];
+      }; in import nixpkgs' { inherit system overlays; };
       forAllSystems = fn: nixpkgs.lib.genAttrs (import systems) (system: fn (pkgsFor system));
 
     in
     {
       inherit extraPluginLicenses;
       formatter = forAllSystems (pkgs: pkgs.nixfmt-tree);
-      wordpress = forAllSystems (pkgs: pkgs.wordpressPackages);
+      pkgsFor = pkgsFor;
 
       packages = forAllSystems (
         pkgs:
